@@ -1,6 +1,84 @@
 import random
 import string
 
+class Hangman():
+    def hangmanBody(self, guesses):
+        if guesses == 8:
+			print "________      "
+			print "|             "
+			print "|             "
+			print "|             "
+			print "|             "
+			print "|             "
+
+        elif guesses == 7:
+            print "________      "
+            print "|      |      "
+            print "|             "
+            print "|             "
+            print "|             "
+            print "|             "
+
+        elif guesses == 6:
+            print "________      "
+            print "|      |      "
+            print "|      ^      "
+            print "|             "
+            print "|             "
+            print "|             "
+
+        elif guesses == 5:
+            print "________      "
+            print "|      |      "
+            print "|            "
+            print "|             "
+            print "|             "
+            print "|             "
+
+        elif guesses == 4:
+            print "________      "
+            print "|      |      "
+            print "|      ^      "
+            print "|      o      "
+            print "|      |      "
+            print "|             "
+            print "|             "
+
+        elif guesses == 3:
+            print "________      "
+            print "|      ^      "
+            print "|      o      "
+            print "|     /|      "
+            print "|             "
+            print "|             "
+
+        elif guesses == 2:
+            print "________      "
+            print "|      |      "
+            print "|      ^      "
+            print "|      o      "
+            print "|     /|\     "
+            print "|             "
+            print "|             "
+
+        elif guesses == 1:
+            print "________      "
+            print "|      |      "
+            print "|      ^      "
+            print "|      o      "
+            print "|     /|\     "
+            print "|     /       "
+            print "|             "
+
+        else:
+            print "________      "
+            print "|      |      "
+            print "|      ^      "
+            print "|     \o/     "
+            print "|      |      "
+            print "|     / \     "
+            print "|             "
+
 WORDLIST_FILENAME = "palavras.txt"
 
 def loadWords():
@@ -45,22 +123,26 @@ def getGuessedWord():
 
 def getAvailableLetters():
     import string
-    # 'abcdefghijklmnopqrstuvwxyz'
+      #'abcdefghijklmnopqrstuvwxyz'
     available = string.ascii_lowercase
 
 
     return available
 
-def hangman(secretWord):
+def main(secretWord):
 
     guesses = 8
     lettersGuessed = []
+    hangman = Hangman()
+
     print 'Welcome to the game, Hangam!'
     print 'I am thinking of a word that is', len(secretWord), ' letters long.'
     print '-------------'
 
     while  isWordGuessed(secretWord, lettersGuessed) == False and guesses >0:
         print 'You have ', guesses, 'guesses left.'
+
+        hangman.hangmanBody(guesses)
 
         available = getAvailableLetters()
         for letter in available:
@@ -114,4 +196,4 @@ def hangman(secretWord):
 
 
 secretWord = loadWords().lower()
-hangman(secretWord)
+main(secretWord)
