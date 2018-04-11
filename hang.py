@@ -141,16 +141,16 @@ class Hangman(WordWorld):
 
 def main():
 
-    guesses = 8
-    letters_guessed = []
+    guesses = 8    
     hangman = Hangman(guesses)
     letter_word = WordWorld(guesses)
-
+    letters_guessed = hangman.letters_guessed
+    
     print 'Welcome to the game, Hangman!'
     print 'I am thinking of a word that is', len(hangman.secret_word), ' letters long.'
     print '-------------'
 
-    while  hangman.is_word_guessed() is False and guesses > 0:
+    while not hangman.is_word_guessed() and guesses > 0:
         print 'You have ', guesses, 'guesses left.'
 
         hangman.hangman_body(guesses)
@@ -163,28 +163,26 @@ def main():
         print 'Available letters', available
         letter = raw_input('Please guess a letter: ')
         if letter in letters_guessed:
-           hangman.letters_guessed.append(letter)
-           guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
+           letters_guessed.append(letter)
+           guessed = letter_word.guessed_letter(hangman.secret_word, letters_guessed)
 
            print 'Oops! You have already guessed that letter: ', guessed
         elif letter in hangman.secret_word:
             letters_guessed.append(letter)
-            guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
+            guessed = letter_word.guessed_letter(hangman.secret_word, letters_guessed)
             print 'Good Guess: ', guessed
         else:
             guesses -=1
             letters_guessed.append(letter)
-            guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
+            guessed = letter_word.guessed_letter(hangman.secret_word, letters_guessed)
 
             print 'Oops! That letter is not in my word: ', guessed
         print '------------'
 
     else:
-        if hangman.is_word_guessed() is True:
-            hangman = Hangman(guesses)
+        if hangman.is_word_guessed():
             print 'Congratulations, you won!'
         else:
-            hangman = Hangman(guesses)
             print 'Sorry, you ran out of guesses. The word was ', hangman.secret_word, '.'
 
 main()
