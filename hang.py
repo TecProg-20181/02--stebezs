@@ -8,23 +8,16 @@ class WordWorld(object):
         self.secret_word = self.load_words().lower()
         self.letters_guessed = []
         self.guessed = guesses
-    
+
     def is_word_guessed(self):
-        # secret_letters = []
-
-    #    for letter in secret_word:
-    #        if letter in secret_letters:
-    #            secret_letters.append(letter)
-    #        else:
-    #            pass
-
         for letter in self.secret_word:
           if letter in self.letters_guessed:
-            pass
+             pass
           else:
-            return False
+             return False
 
         return True
+
     def load_words(self):
         """
         Depending on the size of the word list, this function may
@@ -38,9 +31,36 @@ class WordWorld(object):
         # wordlist: list of strings
         wordlist = string.split(line)
         print "  ", len(wordlist), "words loaded."
+
         return random.choice(wordlist)
 
+    def get_guessed_word(self):
+        guessed = ''
+
+        return guessed
+
+    def get_available_letters(self):
+      #'abcdefghijklmnopqrstuvwxyz'
+        available = string.ascii_lowercase
+
+        return available
+
+    def guessed_letter(self, secret_word, letters_guessed):
+        guessed = self.get_guessed_word()
+
+        for letter in secret_word:
+            if letter in letters_guessed:
+                guessed += letter
+            else:
+                guessed += '_ '
+                
+        return guessed
+
 class Hangman(WordWorld):
+
+    def __init__(self, guesses):
+        WordWorld.__init__(self, guesses=guesses)
+
     def hangman_body(self, guesses):
         if guesses == 8:
             print "________      "
@@ -69,7 +89,8 @@ class Hangman(WordWorld):
         elif guesses == 5:
             print "________      "
             print "|      |      "
-            print "|            "
+            print "|      ^      "
+            print "|      o      "
             print "|             "
             print "|             "
             print "|             "
@@ -118,37 +139,23 @@ class Hangman(WordWorld):
             print "|     / \     "
             print "|             "
 
-def get_guessed_word():
-
-     guessed = ''
-
-
-     return guessed
-
-def get_available_letters():
-    import string
-      #'abcdefghijklmnopqrstuvwxyz'
-    available = string.ascii_lowercase
-
-
-    return available
-
 def main():
 
     guesses = 8
     letters_guessed = []
     hangman = Hangman(guesses)
+    letter_word = WordWorld(guesses)
 
-    print 'Welcome to the game, Hangam!'
+    print 'Welcome to the game, Hangman!'
     print 'I am thinking of a word that is', len(hangman.secret_word), ' letters long.'
     print '-------------'
 
-    while  hangman.is_word_guessed() == False and guesses > 0:
+    while  hangman.is_word_guessed() is False and guesses > 0:
         print 'You have ', guesses, 'guesses left.'
 
         hangman.hangman_body(guesses)
 
-        available = get_available_letters()
+        available = hangman.get_available_letters()
         for letter in available:
             if letter in letters_guessed:
                 available = available.replace(letter, '')
@@ -156,47 +163,28 @@ def main():
         print 'Available letters', available
         letter = raw_input('Please guess a letter: ')
         if letter in letters_guessed:
+           hangman.letters_guessed.append(letter)
+           guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
 
-            guessed = get_guessed_word()
-            for letter in hangman.secret_word:
-                if letter in letters_guessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
-
-            print 'Oops! You have already guessed that letter: ', guessed
+           print 'Oops! You have already guessed that letter: ', guessed
         elif letter in hangman.secret_word:
             letters_guessed.append(letter)
-
-            guessed = get_guessed_word()
-            for letter in hangman.secret_word:
-                if letter in letters_guessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
-
+            guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
             print 'Good Guess: ', guessed
         else:
             guesses -=1
             letters_guessed.append(letter)
+            guessed = letter_word.guessed_letter(hangman.secret_word, hangman.letters_guessed)
 
-            guessed = get_guessed_word()
-            for letter in hangman.secret_word:
-                if letter in letters_guessed:
-                    guessed += letter
-                else:
-                    guessed += '_ '
-
-            print 'Oops! That letter is not in my word: ',  guessed
+            print 'Oops! That letter is not in my word: ', guessed
         print '------------'
 
     else:
-        if hangman.is_word_guessed() == True:
-            hangman.hangman_body(guesses)
+        if hangman.is_word_guessed() is True:
+            hangman = Hangman(guesses)
             print 'Congratulations, you won!'
         else:
-            hangman.hangman_body(guesses)
+            hangman = Hangman(guesses)
             print 'Sorry, you ran out of guesses. The word was ', hangman.secret_word, '.'
-
 
 main()
