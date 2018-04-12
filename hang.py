@@ -29,10 +29,15 @@ class WordWorld(object):
         # line: string
         line = inFile.readline()
         # wordlist: list of strings
-        wordlist = string.split(line)
-        print "  ", len(wordlist), "words loaded."
+        word_list = string.split(line)
+        print "  ", len(word_list), "words loaded."
 
-        return random.choice(wordlist)
+        random_word = random.choice(word_list)
+        join_letters = ''.join(set(random_word))
+
+        while(len(join_letters) > 8):
+           random_choice_word = random.choice(word_list)  
+        return random_word
 
     def get_guessed_word(self):
         guessed = ''
@@ -55,6 +60,10 @@ class WordWorld(object):
                 guessed += '_ '
                 
         return guessed
+
+    def unite_letters(self, secret_word):
+        unite_letters = ''.join(set(secret_word))
+        print "This word has ", len(unite_letters), " different letters"
 
 class Hangman(WordWorld):
 
@@ -148,6 +157,7 @@ def main():
     
     print 'Welcome to the game, Hangman!'
     print 'I am thinking of a word that is', len(hangman.secret_word), ' letters long.'
+    letter_word.unite_letters(hangman.secret_word)
     print '-------------'
 
     while not hangman.is_word_guessed() and guesses > 0:
